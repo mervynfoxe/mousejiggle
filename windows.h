@@ -13,12 +13,14 @@ void move(int x, int y) {
 }
 
 // Perform setup operations
-void setup() {
+int setup() {
 	// Nothing needed here
+	return 0;
 }
 
 // Perform cleanup options before exiting
-void cleanup() {
+int cleanup() {
 	// Nothing needed here
 	getchar();
+	return 0;
 }

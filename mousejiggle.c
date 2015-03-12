@@ -46,7 +46,8 @@ int run() {
 int main(int argc, char *argv[]) { 
 	// Set handler for interrupts
 	signal(SIGINT, int_handler);
-	setup();
+	if (setup() != 0)
+		return -1;
 
 	// Run main loop, print movement count when done
 	int movements = run();

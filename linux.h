@@ -70,17 +70,20 @@ void pixel_color(int x, int y, XColor *color) {
 }
 
 // Perform setup operations
-void setup() {
+int setup() {
 	// Open X display
 	display = XOpenDisplay(NULL);
 	if (display == NULL) {
 		fprintf(stderr, "Can't open display!\n");
 		return -1;
 	}
+	return 0;
 }
 
 // Perform cleanup options before exiting
-void cleanup() {
+int cleanup() {
 	// Close X display
 	XCloseDisplay(display);
+
+	return 0;
 }
