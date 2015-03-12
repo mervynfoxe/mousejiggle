@@ -14,13 +14,15 @@ static int delta = 10; // Number of pixels to move the cursor
 static int delay = 60; // Seconds between movements
 static bool running = true;
 
+static Display *display;
+
 // Handle keyboard interrupt
 void int_handler(int dummy) {
 	running = false;
 }
 
 // Simulate mouse click
-void click(Display *display, int button) {
+void click(int button) {
 	// Create and setting up the event
 	XEvent event;
 	memset(&event, 0, sizeof(event));
@@ -50,7 +52,7 @@ void click(Display *display, int button) {
 }
 
 // Get mouse coordinates
-void coords(Display *display, int *x, int *y) {
+void coords(int *x, int *y) {
 	XEvent event;
 	XQueryPointer(display, DefaultRootWindow(display),
 					&event.xbutton.root, &event.xbutton.window,
@@ -62,23 +64,23 @@ void coords(Display *display, int *x, int *y) {
 }
 
 // Move mouse pointer (relative)
-void move(Display *display, int x, int y) {
+void move(int x, int y) {
 	XWarpPointer(display, None, None, 0,0,0,0, x, y);
 	XFlush(display);
 	usleep(1);
 }
 
 // Move mouse pointer (absolute)
-void move_to(Display *display, int x, int y) {
+void move_to(int x, int y) {
 	int cur_x, cur_y;
-	coords(display, &cur_x, &cur_y);
+	coords(&cur_x, &cur_y);
 	XWarpPointer(display, None, None, 0,0,0,0, -cur_x, -cur_y);
 	XWarpPointer(display, None, None, 0,0,0,0, x, y);
 	usleep(1);
 }
 
 // Get pixel color at coordinates x,y
-void pixel_color(Display *display, int x, int y, XColor *color) {
+void pixel_color(int x, int y, XColor *color) {
 	XImage *image;
 	image = XGetImage(display, DefaultRootWindow(display), x, y, 1, 1, AllPlanes, XYPixmap);
 	color->pixel = XGetPixel(image, 0, 0);
@@ -86,7 +88,7 @@ void pixel_color(Display *display, int x, int y, XColor *color) {
 	XQueryColor(display, DefaultColormap(display, DefaultScreen(display)), color);
 }
 
-int run(Display *display) {
+int run() {
 	int movements = 0;
 	//int cur_x;
 	//int cur_y;
@@ -94,9 +96,9 @@ int run(Display *display) {
 	while(running) {
 		// TODO check if mouse was moved manually between movements,
 		// only move here if it wasn't.
-		//coords(display, &cur_x, &cur_y);
+		//coords(&cur_x, &cur_y);
 		sleep(delay);
-		move(display, delta, delta);
+		move(delta, delta);
 		movements++;
 		delta = -delta;
 	}
@@ -110,14 +112,14 @@ int main(int argc, char *argv[]) {
 	signal(SIGINT, int_handler);
 
 	// Open X display
-	Display *display = XOpenDisplay(NULL);
+	display = XOpenDisplay(NULL);
 	if (display == NULL) {
 		fprintf(stderr, "Can't open display!\n");
 		return -1;
 	}
 
 	// Run main loop, print movement count when done
-	int movements = run(display);
+	int movements = run();
 	printf("\n%d movements made.\n", movements);
 
 	// Close X display and exit
