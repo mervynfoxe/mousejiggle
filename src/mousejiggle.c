@@ -32,8 +32,15 @@ int run() {
 	while(running) {
 		// TODO check if mouse was moved manually between movements,
 		// only move here if it wasn't.
-		//coords(&cur_x, &cur_y);
-		sleep(delay);
+
+		// Sleep for one second [delay] times rather than
+		// once for [delay] seconds to allow for interruptions
+		int i;
+		for (i = 0; i < delay; i++) {
+			sleep(1);
+			if (running == false)
+				break;
+		}
 		move(delta, delta);
 		movements++;
 		delta = -delta;

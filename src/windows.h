@@ -21,6 +21,7 @@ int setup() {
 // Perform cleanup options before exiting
 int cleanup() {
 	// Nothing needed here
+	printf("Press Enter to continue...");
 	getchar();
 	return 0;
 }
