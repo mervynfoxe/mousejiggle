@@ -2,6 +2,16 @@
 #define WIN32_EXTRA_LEAN // Exclude More Windows Crap
 #include <windows.h>
 
+// Simulate mouse click
+void click(int button) {
+
+}
+
+// Get mouse coords
+void coords(int *x, int *y) {
+
+}
+
 // Move mouse pointer (relative)
 void move(int x, int y) {
 	POINT p;
@@ -10,6 +20,16 @@ void move(int x, int y) {
 	p.y += y;
 	SetCursorPos(p.x, p.y);
 	Sleep(1);
+}
+
+// Move mouse pointer (absolute)
+void move_to(int x, int y) {
+
+}
+
+// Get pixel color at coordinates x,y
+void pixel_color(int x, int y) {
+
 }
 
 // Perform setup operations
